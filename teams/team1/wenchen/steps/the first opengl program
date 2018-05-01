@@ -1,0 +1,5 @@
+step1：新建一个文件夹，取名“sunwenchen”
+step2：打开gedit，编辑第一个代码，保存为“sun.c”
+step3：在控制台输入“cd sunwenchen”进入“sunwenchen”这个文件夹
+step4：在控制台输入“gcc sun.c -o sun -lGL -lglut -lGLU”进行编译
+step5：在控制台输入“./sun”查看结果
