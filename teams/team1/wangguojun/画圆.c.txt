@@ -1,0 +1,56 @@
+#include<stdlib.h>
+#include<iostream.h>   
+#include <GL/glut.h>   
+  
+/* initialization: */  
+void myinit(void)  
+{  
+   
+/* attributes */  
+  
+      glClearColor(1.0, 1.0, 1.0, 0.0);//设置背景颜色  
+      glColor3f(1.0, 0.0, 0.0); //设置绘制颜色为红色
+  
+/* set up viewing: */  
+/* 500 x 500 window with origin lower left */  
+  
+      glMatrixMode(GL_PROJECTION); //指定设置投影参数 
+      glLoadIdentity(); 
+
+void  plot_circle_points(int xc,int yc,int x,int y)//画圆
+{  
+      glBegin(GL_POINTS);  
+      glVertex3f(xc+x,yc+y,0);   
+      glVertex3f(xc-x,yc+y,0);  
+      glVertex3f(xc+x,yc-y,0);  
+      glVertex3f(xc-x,yc-y,0);  
+      glVertex3f(xc+y,yc+x,0);  
+      glVertex3f(xc-y,yc+x,0);  
+      glVertex3f(xc+y,yc-x,0);  
+      glVertex3f(xc-y,yc-x,0);  
+      glEnd();
+}
+void drawcircle(int xc,int yc,int radius)  
+{  
+     int x,y,p;  
+     x=0;  
+     y=radius;  
+     p=3-2*radius;  
+     glClear(GL_COLOR_BUFFER_BIT);  
+     glBegin(GL_POINTS);  
+     while(x<y)  
+     {  
+          plot_circle_points(xc,yc,x,y);  
+          if(p<0)  
+                 p=p+4*x+6;  
+          else  
+          {  
+                 p=p+4*(x-y)+10;  
+                 y-=1;                   
+          }  
+          x+=1;            
+     }       
+     if(x==y)  
+          plot_circle_points(xc,yc,x,y);  
+}
+
