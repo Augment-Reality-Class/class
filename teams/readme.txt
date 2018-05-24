@@ -7,3 +7,6 @@ Everybody should submit 8 progamms well made in your computer.
 6. render the human face by using a photo
 7. Artoolkits install and read the simplevrml programm
 8. your AR show (HOMEWORK and EXAMATION)
+
+
+https://blog.csdn.net/dcrmg/article/details/53180369 作为样例
