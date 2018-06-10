@@ -871,3 +871,4 @@ int main(int argc, char* argv[])
 	glutMainLoop(); //循环调用
 	return 0;
 }
+
