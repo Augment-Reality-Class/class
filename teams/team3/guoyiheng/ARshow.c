@@ -1,27 +1,7 @@
-Date: Wed, 13 Jun 2018 13:06:14 GMT
-Content-Type: text/html; charset=utf-8
-Transfer-Encoding: chunked
-Server: GitHub.com
-Status: 200 OK
-Cache-Control: no-cache
-Vary: X-PJAX
-Set-Cookie: logged_in=no; domain=.github.com; path=/; expires=Sun, 13 Jun 2038 13:06:13 -0000; secure; HttpOnly
-Set-Cookie: _gh_sess=S3VZeDlyYm8wSlBEdi83WjRXRFU2RzRNYzVKcGRJeDc4TFAvRFpsUkRvUUxscGltVDFTYURiWXlqWEx4ZS8vRXVVSHNOZFhReFhTVS9hSktZWWtxZmFNeENBMTdlUzhQektXV1BOYXRTQlZLNlZaa3p5WWw1Ry8vdjdxMW5LczY1eWtHZnpEcDRxWktFRGJxSzh4YXIwaFVkS0hMZ2NnZkRlYmpSaUxYaE5FVWVKNWl3OGxNeWVFMml3K2xxamZFNHduakdmWWlpQ3ZML2FRZ2I5aE5oNGFOcFMrYWdpODY5ZllGcHdadFVGK1pCOC80WXVwbzJKdFJic0tVVEhvbUhLQWY5RW9ZdXFDM2YwL3F1SDJ2RXR3ckNYeVpIZjU5M3FnWk5NVDdRbm5oNDhVblRVcmR3Q09DaktGZGdHQ245Ykk2WGRWdlJpZlFKeFBYdEl2TFdpa1hGUDJoTDFVZndQUjRESnZFQTNPQjRpamlwa0pUajlQR2NvZ3drbC9qTis4aXJYeVFkRGF1Yms4aDdyYlo1aGM1ejdBYlNYUUhINHd0UkFVUlVmMEpJRlNMdTlGRUtCWFJjRmJhelBhSC0tWWV4KzlPL3FkdEhlTSs0czBSVUFMQT09--37dc4e9874efb947a9909c4cbe0e1ba8ed7b453a; path=/; secure; HttpOnly
-X-Request-Id: 562c2e9f-f16d-43f6-af2e-c7cd6f1e9050
-X-Runtime: 0.287929
-Strict-Transport-Security: max-age=31536000; includeSubdomains; preload
-X-Frame-Options: deny
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 1; mode=block
-Expect-CT: max-age=2592000, report-uri="https://api.github.com/_private/browser/errors"
-Content-Security-Policy: default-src 'none'; base-uri 'self'; block-all-mixed-content; connect-src 'self' uploads.github.com status.github.com collector.githubapp.com api.github.com www.google-analytics.com github-cloud.s3.amazonaws.com github-production-repository-file-5c1aeb.s3.amazonaws.com github-production-upload-manifest-file-7fdce7.s3.amazonaws.com github-production-user-asset-6210df.s3.amazonaws.com wss://live.github.com; font-src assets-cdn.github.com; form-action 'self' github.com gist.github.com; frame-ancestors 'none'; frame-src render.githubusercontent.com; img-src 'self' data: assets-cdn.github.com identicons.github.com collector.githubapp.com github-cloud.s3.amazonaws.com *.githubusercontent.com; manifest-src 'self'; media-src 'none'; script-src assets-cdn.github.com; style-src 'unsafe-inline' assets-cdn.github.com
-X-Runtime-rack: 0.298567
-Vary: Accept-Encoding
-X-GitHub-Request-Id: DD7D:6B22:232EC2:320F3A:5B2116C4
-
-316f
-
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//@author:郭怡亨//////////////////////////////////////////////////////////////////////////////////////////////////////
+//created at 2018/6/13///////////////////////////////////////////////////////////////////////////////////////////////
+//通过本次实验学到了如何将人脸渲染到模型上////////////////////////////////////////////////////////////////////////////////
 
 
 
