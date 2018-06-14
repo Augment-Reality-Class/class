@@ -1,4 +1,7 @@
 /* 2015071 20151340 张皓霖*/
+//报告在doc文件夹下
+//照片在sourcefiles/face2.bmp
+//在colormat基础上增删调整后，增加了光照、阴影、抗锯齿，改变了背景颜色，突出了人脸的高清效果
 #include "GL/glut.h"
 #include <stdlib.h>
 #include "candide.h"
