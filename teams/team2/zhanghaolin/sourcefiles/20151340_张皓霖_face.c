@@ -1,35 +1,29 @@
-/* 2015071 20151340 �����*/
+/* 2015071 20151340 张皓霖*/
 #include "GL/glut.h"
 #include <stdlib.h>
 #include "candide.h"
 #include "gl/glaux.h"
 GLfloat diffuseMaterial[4] = { 0.5, 0.5, 0.5, 1.0 };
 int s1 = 0, s2 = 0;
-
-/*  Initialize material property, light source, lighting model,
-*  and depth buffer.
-*/
 AUX_RGBImageRec *image;
 unsigned char *pdata;
-
-
 void FaceTexture(void)
 {
 	image = auxDIBImageLoad("face2.bmp");
-
 	if (!pdata != NULL)
 		free(pdata);
 	pdata = (BYTE*)malloc(256 * 256 * 3 * sizeof(BYTE));
 	if (!pdata)
 		exit(0);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	//glPixelStorei(GL_UNPACK_ALIGNMENT,1)控制的是所读取数据的对齐方式，默认4字节对齐，即一行的图像数据字节数必须是4的整数倍，即读取数据时，读取4个字节用来渲染一行，之后读取4字节数据用来渲染第二行。
+	//对RGB 3字节像素而言，若一行10个像素，即30个字节，在4字节对齐模式下，OpenGL会读取32个字节的数据，若不加注意，会导致glTextImage中致函数的读取越界，从而全面崩溃。
 	gluScaleImage(GL_RGB, image->sizeX, image->sizeY, GL_UNSIGNED_BYTE, image->data,
 		256, 256, GL_UNSIGNED_BYTE, pdata);
-
+	//gluScaleImage这个函数用适当的像素存储模式改变一个像素图像的大小来读取源图像的像素数据然后把像素写入新的目标图像
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, pdata);
+	//glteximage2d是一个OpenGL函数，功能是根据指定的参数，生成一个2D纹理（Texture）
 }
-
-
 void initlights(void)
 {
 	GLfloat ambient[] = { 0.2, 0.2, 0.2, 1.0 };
@@ -37,229 +31,92 @@ void initlights(void)
 	GLfloat mat_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
 	GLfloat mat_specular[] = { 0.0, 0.0, 1.0, 1.0 };
 	GLfloat mat_shininess[] = { 100.0 };
-
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
 	glLightfv(GL_LIGHT0, GL_POSITION, position);
-
+	////创建指定的光源,light可以是GL_LIGHT0、GL_LIGHT1，pname定义的是光源的属性，它指定了一个命名参数。params表示表示pname属性将要被设置的值  
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+	//指定用于光照计算的当前材质属性。参数face的取值可以是GL_FRONT、GL_BACK或GL_FRONT_AND_BACK，指出材质属性将应用于物体的哪面。
 }
-//void init(void)
-//{
-//   glClearColor(0.0, 0.0, 0.0, 0.0);
-//   glEnable(GL_DEPTH_TEST);
-//   glMap2f(GL_MAP2_VERTEX_3, 0, 1, 3, 4,
-//           0, 1, 12, 4, &ctrlpoints[0][0][0]);
-//   glEnable(GL_MAP2_VERTEX_3);
-//   glEnable(GL_AUTO_NORMAL);
-//   glMapGrid2f(20, 0.0, 1.0, 20, 0.0, 1.0);
-//   initlights();       /* for lighted version only */
-//}
-
 void init(void)
 {
-
-	//glClearColor(0.0,0.0,0.0,0.0);
-	
-	
-	/*	//���ʷ���������
-		GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };  //���淴�����
-		GLfloat mat_shininess[] = { 100.0 };               //�߹�ָ��
-		GLfloat light_position[] = { 1.0, 1.0, 1.0, 0.0 };
-		GLfloat white_light[] = { 1.0, 1.0, 1.0, 1.0 };   //��λ��(1,1,1), ���1-����
-		GLfloat Light_Model_Ambient[] = { 0.2, 0.2, 0.2, 1.0 }; //���������
-
-		glClearColor(0.0, 0.0, 0.0, 0.0);  //����ɫ
-		glShadeModel(GL_SMOOTH);           //��������ģʽ
-
-		//��������
-		glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-		glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-
-		//�ƹ�����
-		glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-		glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);   //ɢ�������
-		glLightfv(GL_LIGHT0, GL_SPECULAR, white_light);  //���淴���
-		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, Light_Model_Ambient);  //���������
-
-		glEnable(GL_LIGHTING);   //����:ʹ�ù�
-		glEnable(GL_LIGHT0);     //��0#��
-		glEnable(GL_DEPTH_TEST); //����Ȳ���*/
-
-
-
-	//OpenGl�趨  
-	glEnable(GL_BLEND);             //���û�Ϲ��ܣ���ͼ����ɫͬ��Χ��ɫ����    
+	//OpenGl设定  抗锯齿
+	glEnable(GL_BLEND);             //启用混合功能，将图形颜色同周围颜色相混合    
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glEnable(GL_POLYGON_SMOOTH);     //����ο����    
+	glEnable(GL_POLYGON_SMOOTH);     //多边形抗锯齿    
 	glHint(GL_POLYGON_SMOOTH, GL_NICEST);
 
-	glEnable(GL_LINE_SMOOTH);        //�߿����    
+	glEnable(GL_LINE_SMOOTH);        //线抗锯齿    
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
-	glEnable(GL_POINT_SMOOTH);       //�㿹���    
+	glEnable(GL_POINT_SMOOTH);       //点抗锯齿    
 	glHint(GL_POINT_SMOOTH, GL_NICEST);
-
-	// ------------���ù��ռ���-----------------------
+	// ------------启用光照计算-----------------------
 	glEnable(GL_LIGHTING);
-	// ָ��������ǿ�ȣ�RGBA��
+	// 指定环境光强度（RGBA）
 	GLfloat ambientLight[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	// ָ��ɢ���ǿ�ȣ�RGBA��
+	// 指定散射光强度（RGBA）
 	GLfloat diffuseLight[] = { 0.7f, 0.7f, 0.7f, 1.0f };
-	// ָ�������ǿ�ȣ�RGBA��
+	// 指定镜面光强度（RGBA）
 	GLfloat specularLight[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	// ָ�����ϵľ���ⷴ������
+	// 指定材料的镜面光反射属性
 	GLfloat specref[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	// ���ù�Դ0�Ļ�����ɷ�
+	// 设置光源0的环境光成分
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
-	// ���ù�Դ0��ɢ���ɷ�
+	// 设置光源0的散射光成分
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
-	// ���ù�Դ0�ľ����ɷ�
+	// 设置光源0的镜面光成分
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
-	// ���ù�Դ0
+	// 启用光源0
 	glEnable(GL_LIGHT0);
-	// ������ɫ׷��
+	// 启用颜色追踪
 	glEnable(GL_COLOR_MATERIAL);
-	// ���ö��������Ļ������ɢ���������ԣ�׷��glColor
+	// 设置多边形正面的环境光和散射光材料属性，追踪glColor
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-	// ���ö��������ľ�����������
+	// 设置多边形正面的镜面光材料属性
 	glMaterialfv(GL_FRONT, GL_SPECULAR, specref);
-	// ָ������ָ��
+	// 指定镜面指数
 	glMateriali(GL_FRONT, GL_SHININESS, 128);
-	// ָ�����ɫ
+	// 指定清除色
 	glClearColor(0.0f, 0.0f, 0.5f, 1.0f);
-	// ���߹淶��
+	// 法线规范化
 	glEnable(GL_NORMALIZE);
-
-
-	/*//���ʷ���������
-	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };  //���淴�����
-	GLfloat mat_shininess[] = { 50.0 };               //�߹�ָ��
-	GLfloat light_position[] = { 3.0, 3.0, 3.0, 0.0 };
-	GLfloat white_light[] = { 1.0, 1.0, 1.0, 1.0 };   //��λ��(1,1,1), ���1-����
-	GLfloat Light_Model_Ambient[] = { 0.8, 0.2, 0.2, 1.0 }; //���������
-	//��������
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-	//�ƹ�����
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, white_light);   //ɢ�������
-	glLightfv(GL_LIGHT0, GL_SPECULAR, white_light);  //���淴���
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, Light_Model_Ambient);  //���������
-
-	glEnable(GL_LIGHTING);   //����:ʹ�ù�
-	glEnable(GL_LIGHT0);     //��0#��
-	glEnable(GL_DEPTH_TEST); //����Ȳ���*/
-
-
     glEnable(GL_DEPTH_TEST);
 	glEnable(GL_AUTO_NORMAL);
 	glEnable(GL_NORMALIZE);
 	glDepthFunc(GL_LESS);
+	//指定“目标像素与当前像素在z方向上值大小比较”的函数，符合该函数关系的目标像素才进行绘制，否则对目标像素不予绘制。
 	glFrontFace(GL_CW);
+	//glFrontFace()是opengl的初级命令，有两个基本作用，一是可以用来用在某些特殊场合（比如剔除面片），二是可以提高渲染效率。
 	glShadeModel(GL_SMOOTH); 
-
+	//设置着色模式
 	
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, pdata);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);//就是重复边界的纹理
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);//纹理过滤
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexEnvi(GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_DECAL);
-	//glClearColor (0.0, 0.0, 0.0, 0.0);
-	//glShadeModel (GL_SMOOTH);
-	// glEnable(GL_DEPTH_TEST);
-	// glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,GL_TRUE);
-	//glLightModeli(GL_LIGHT_MODEL_TWO_SIDE,GL_TRUE);
-	//initlights();
-
-	//glEnable(GL_AUTO_NORMAL);
-	// glColorMaterial(GL_FRONT, GL_DIFFUSE);
-	// glEnable(GL_COLOR_MATERIAL);
 }
 
 void display(void)
 {
-
-
-	//int m;
-	//  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//  glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-	//  //	glClear (GL_COLOR_BUFFER_BIT);
-	//   glPushMatrix();
-	//   glTranslatef (0.0, 0.0, 0.0);
-	//   glRotatef ((GLfloat) s1, 0.0, 0.0, 1.0);
-	//   glRotatef ((GLfloat) s2, 0.0, 1.0, 0.0);
-	//   glTranslatef (0.0, 0.0, 0.0);
-	//   glPushMatrix();
-	//   glBegin(GL_TRIANGLES);
-	//  for( m=0;m<184;m++)
-	//  {
-	//	glVertex3fv(&candide_vertices[candide_list[m][0]][0]);
-	//	glNormal3fv(&candide_vertices[candide_list[m][0]][0]);
-	//	glVertex3fv(&candide_vertices[candide_list[m][1]][0]);
-	//	glNormal3fv(&candide_vertices[candide_list[m][1]][0]);
-	//	glVertex3fv(&candide_vertices[candide_list[m][2]][0]);
-	//	glNormal3fv(&candide_vertices[candide_list[m][2]][0]);
-	//  }
-	// glEnd();
-	//   glPopMatrix();
-
-
-	//  glPopMatrix();
-	//  glFlush ();
-	//int m;
-	/*	glPushMatrix();*///�ѵ�ǰ����ѹ������ջ��
-	//glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-	//      glTranslatef(0.0f, 0.0f, -3.0);//�ѵ�ǰ������Ա任��
-	//      glRotatef(wAngleX, 1.0f, 0.0f, 0.0f);//�ѵ�ǰ���������ת��
-	//      glRotatef(wAngleY, 0.0f, 1.0f, 0.0f);
-	//      glRotatef(wAngleZ, 0.0f, 0.0f, 1.0f);
-	// glColor3f(1.0f,0.0f,0.0f);
-
-	/*  glBegin(GL_TRIANGLES);
-	for(m=0;m<184;m++)
-	{
-	glVertex3fv(&candide_vertices[candide_list[m][0]][0]);
-	glVertex3fv(&candide_vertices[candide_list[m][1]][0]);
-	glVertex3fv(&candide_vertices[candide_list[m][2]][0]);
-	}
-	glEnd();*/
-	//glPopMatrix();
 	init();
 	FaceTexture();
-	glPushMatrix();
-	//glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-	//glTranslatef(0.0f, 0.0f, -3.0);//�ѵ�ǰ������Ա任��
-	//glRotatef(wAngleX, 1.0f, 0.0f, 0.0f);//�ѵ�ǰ���������ת��
-	//glRotatef(wAngleY, 0.0f, 1.0f, 0.0f);
-	//glRotatef(wAngleZ, 0.0f, 0.0f, 1.0f);
-	//glBindTexture(GL_TEXTURE_2D/*, texture[0]*/);
-	//glColor3f(1.0f,0.0f,0.0f);
+	glPushMatrix();//当你做了一些移动或旋转等变换后，使用glPushMatrix(), OpenGL 会把这个变换后的位置和角度保存起来。
 	glEnable(GL_TEXTURE_2D);
-	glTranslatef(0.0f, 0.0f, -0.0);//�ѵ�ǰ������Ա任��
-
-	glRotatef(s1, 0.0f, 1.0f, 0.0f);
+	glTranslatef(0.0f, 0.0f, -0.0);//把当前距阵乘以变换阵
+	glRotatef(s1, 0.0f, 1.0f, 0.0f);//其中,angle为旋转的角度,单位为度  围绕坐标轴旋转 XYZ
 	glRotatef(s2, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glBegin(GL_TRIANGLES);
-
-
-	/*glColor3f(1.0,0.0,0.0);*/
-	//glNormal3f(0.0,1.0,0.0);
-	/*glTexCoord2d(0.25,0.25);glVertex3f(-5.0,5.0,5.0);
-	glTexCoord2d(0.75,0.25);glVertex3f(-5.0,-5.0,5.0);
-	glTexCoord2d(0.75,0.75);glVertex3f(-5.0,-5.0,-5.0);
-	glTexCoord2d(0.25,0.75);glVertex3f(-5.0,5.0,-5.0);*/
-	//0
-	glTexCoord2d(0.501041, 0.005000); glVertex3f(0.000000f, 1.061000f, -0.371000f);
-	glTexCoord2d(0.587917, 0.079375); glVertex3f(0.174000f, 0.800000f, -0.024000f);
-	glTexCoord2d(0.600208, 0.014375); glVertex3f(0.217000f, 1.039000f, -0.371000f);
+	glTexCoord2d(0.501041, 0.005000); glVertex3f(0.000000f, 1.061000f, -0.371000f); //glTexCoord*()函数设置了当前的纹理坐标.所有后续的顶点函数把这些纹理坐标与它们相关联, 直到再次调用
+	glTexCoord2d(0.587917, 0.079375); glVertex3f(0.174000f, 0.800000f, -0.024000f); //glVertex3f指定一个顶点
+	glTexCoord2d(0.600208, 0.014375); glVertex3f(0.217000f, 1.039000f, -0.371000f); //glTexCoord2f(s,t)设置当前纹理坐标为(s,t,0,1),
 	glTexCoord2d(0.501041, 0.005000); glVertex3f(0.000000f, 1.061000f, -0.371000f);
 	glTexCoord2d(0.587917, 0.079375); glVertex3f(0.174000f, 0.800000f, -0.024000f);
 	glTexCoord2d(0.412708, 0.080208); glVertex3f(-0.174000f, 0.800000f, -0.024000f);
@@ -832,24 +689,30 @@ void display(void)
 	glPopMatrix();
 	glFlush();
 }
-
 void reshape(int w, int h)
 {
-	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+	glViewport(0, 0, (GLsizei)w, (GLsizei)h); //打开窗口
 	gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	/*该函数定义一个视图矩阵，并与当前矩阵相乘。
+第一组eyex, eyey,eyez 相机在世界坐标的位置
+第二组centerx,centery,centerz 相机镜头对准的物体在世界坐标的位置
+第三组upx,upy,upz 相机向上的方向在世界坐标中的方向
+你把相机想象成为你自己的脑袋：
+第一组数据就是脑袋的位置
+第二组数据就是眼睛看的物体的位置
+第三组就是头顶朝向的方向（因为你可以歪着头看同一个物体）。*/
+	glMatrixMode(GL_PROJECTION);//将当前矩阵指定为投影矩阵
+	glLoadIdentity();//重置当前指定的矩阵为单位矩阵
 	if (w <= h)
 		glOrtho(-1.5, 1.5, -1.5*(GLfloat)h / (GLfloat)w,
 		1.5*(GLfloat)h / (GLfloat)w, -10.0, 10.0);
 	else
 		glOrtho(-1.5*(GLfloat)w / (GLfloat)h,
 		1.5*(GLfloat)w / (GLfloat)h, -1.5, 1.5, -10.0, 10.0);
-	glMatrixMode(GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW);//将当前矩阵指定为模型视图
 	glLoadIdentity();
 }
-
-void mouse(int button, int state, int x, int y)
+void mouse(int button, int state, int x, int y) //鼠标交互
 {
 	switch (button) {
 	case GLUT_LEFT_BUTTON:
@@ -884,7 +747,7 @@ void mouse(int button, int state, int x, int y)
 	}
 }
 
-void keyboard(unsigned char key, int x, int y)
+void keyboard(unsigned char key, int x, int y) //键盘交互
 {
 	switch (key) {
 	case 's':
@@ -913,17 +776,17 @@ void keyboard(unsigned char key, int x, int y)
 
 int main(int argc, char** argv)
 {
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(500, 500);
-	glutInitWindowPosition(100, 100);
-	glutCreateWindow(argv[0]);
-	init();
-	glutDisplayFunc(display);
-	glutReshapeFunc(reshape);
-	glutMouseFunc(mouse);
-	glutKeyboardFunc(keyboard);
-	glutMainLoop();
+	glutInit(&argc, argv); //初始化
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);//设置初始显示模式
+	glutInitWindowSize(500, 500);//设置窗口大小
+	glutInitWindowPosition(100, 100);//设置初始窗口的位置
+	glutCreateWindow(argv[0]);//创建一个顶级窗口
+	init();//初始化
+	glutDisplayFunc(display);//注册一个绘图函数， 这样操作系统在必要时刻就会对窗体进行重新绘制操作
+	glutReshapeFunc(reshape);//当窗口尺寸改变时，图形比例不发生变化
+	glutMouseFunc(mouse);//处理鼠标click事件
+	glutKeyboardFunc(keyboard);//处理键盘click事件
+	glutMainLoop();//让所有的与“事件”有关的函数调用无限循环
 	return 0;
 }
 
